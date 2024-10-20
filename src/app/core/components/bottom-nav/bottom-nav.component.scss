@@ -1,0 +1,16 @@
+@mixin icon {
+  padding: 10px;
+}
+.nav-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  background-color: rgb(190, 0, 190);
+
+  &__builder,
+  &__database,
+  &__share {
+    @include icon;
+  }
+}

@@ -1,0 +1,10 @@
+.main-container {
+  margin: auto;
+  width: 100;
+
+  &__bottom-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+}
