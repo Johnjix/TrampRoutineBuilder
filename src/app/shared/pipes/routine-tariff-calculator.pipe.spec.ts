@@ -1,6 +1,6 @@
 import { RoutineTariffCalculatorPipe } from './routine-tariff-calculator.pipe';
 
-fdescribe('RoutineTariffCalculatorPipe', () => {
+describe('RoutineTariffCalculatorPipe', () => {
   it('create an instance', () => {
     const pipe = new RoutineTariffCalculatorPipe();
     expect(pipe).toBeTruthy();

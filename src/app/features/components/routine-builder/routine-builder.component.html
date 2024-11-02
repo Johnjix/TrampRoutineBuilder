@@ -1,17 +1,21 @@
 <main class="routine-builder-container">
-  <span class="routine-builder-container__total-tariff"
-    >Total tariff:
-    {{ routine | routineTariffCalculator | number : "1.2-2" }}</span
-  >
+  @if(routine$ | async; as routine){
+  <h1 class="routine-builder-container__total-tariff">
+    Total tariff: {{ routine | routineTariffCalculator | number : "1.2-2" }}
+  </h1>
   @for (skill of routine; track $index) {
   <div class="input-group">
     <span class="input-group-text"> {{ $index + 1 }} </span>
     <span class="input-group-text form-control">{{ skill.Name }}</span>
     <span class="input-group-text">{{ skill.Shape }}</span>
     <span class="input-group-text">{{ skill.Tariff }}</span>
-    <span class="input-group-text">
+    <button
+      class="input-group-text"
+      title="open-skill-selection-modal"
+      (click)="openSkillSelectionModal(skill, $index)"
+    >
       <i class="fa-solid fa-magnifying-glass"></i>
-    </span>
+    </button>
   </div>
-  }
+  } }
 </main>
