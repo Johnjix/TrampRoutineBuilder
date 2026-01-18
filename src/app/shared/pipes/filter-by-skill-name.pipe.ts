@@ -11,7 +11,7 @@ export class FilterBySkillNamePipe implements PipeTransform {
     if (skillName === null || skillName === '') return skills;
 
     const filteredSkills = skills.filter((skill) =>
-      skill.Name.toLowerCase().includes(skillName.toLowerCase())
+      skill.name.toLowerCase().includes(skillName.toLowerCase()),
     );
 
     return filteredSkills;

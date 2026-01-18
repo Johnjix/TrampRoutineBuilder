@@ -7,21 +7,17 @@ import {
 import { Skill } from '../../../models/skill.model';
 import { RoutineTariffCalculatorPipe } from '../../../shared/pipes/routine-tariff-calculator.pipe';
 import { CommonModule } from '@angular/common';
-import {
-  NgbAccordionModule,
-  NgbModal,
-  NgbModalRef,
-} from '@ng-bootstrap/ng-bootstrap';
+import { NgbAccordionModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SkillSelectionModalComponent } from '../skill-selection-modal/skill-selection-modal.component';
 import { combineLatest, map, Observable, startWith, Subject } from 'rxjs';
-import { DefaultRoutineTemplate } from '../../../shared/data/skill-template';
+import { DEFAULT_ROUTINE_TEMPLATE } from '../../../shared/data/skill-template';
 import { RoutineTemplate } from '../../../models/routine-template.model';
 import { ROUTINE_TEMPLATES } from '../../../shared/data/routine-templates';
 
-export interface SkillReplace {
-  SkillIndex: number;
-  Skill: Skill;
-}
+export type SkillReplace = {
+  skillIndex: number;
+  skill: Skill;
+};
 @Component({
   selector: 'app-routine-builder',
   imports: [RoutineTariffCalculatorPipe, CommonModule, NgbAccordionModule],
@@ -36,7 +32,7 @@ export class RoutineBuilderComponent {
   skillReplace$: Subject<SkillReplace>;
 
   get defaultTemplate(): Skill[] {
-    return DefaultRoutineTemplate.Routine;
+    return DEFAULT_ROUTINE_TEMPLATE.routine;
   }
 
   protected readonly premadeRoutines =
@@ -52,23 +48,20 @@ export class RoutineBuilderComponent {
     ]).pipe(
       map(([routineTemplate, skillReplace]) => {
         if (routineTemplate === null) return [];
-        if (skillReplace === null) return routineTemplate.Routine;
+        if (skillReplace === null) return routineTemplate.routine;
 
         return [
-          ...this.replaceSkillInRoutine(routineTemplate.Routine, skillReplace),
+          ...this.replaceSkillInRoutine(routineTemplate.routine, skillReplace),
         ];
       }),
     );
   }
 
-  public openSkillSelectionModal(skill: Skill, skillIndex: number): void {
-    const _modalRef: NgbModalRef = this._modalService.open(
-      SkillSelectionModalComponent,
-      {
-        fullscreen: true,
-        scrollable: true,
-      },
-    );
+  openSkillSelectionModal(skill: Skill, skillIndex: number): void {
+    const _modalRef = this._modalService.open(SkillSelectionModalComponent, {
+      fullscreen: true,
+      scrollable: true,
+    });
 
     const componentInstance: SkillSelectionModalComponent =
       _modalRef.componentInstance;
@@ -79,8 +72,8 @@ export class RoutineBuilderComponent {
     _modalRef.result
       .then((selectedSkill: Skill) => {
         this.skillReplace$.next({
-          Skill: selectedSkill,
-          SkillIndex: skillIndex,
+          skill: selectedSkill,
+          skillIndex: skillIndex,
         });
       })
       .catch(() => null);
@@ -90,12 +83,12 @@ export class RoutineBuilderComponent {
     routine: Skill[],
     skillReplace: SkillReplace,
   ): Skill[] {
-    routine[skillReplace.SkillIndex] = skillReplace.Skill;
+    routine[skillReplace.skillIndex] = skillReplace.skill;
 
     return routine;
   }
 
-  public selectRoutineTemplate(routineTemplate: RoutineTemplate): void {
+  selectRoutineTemplate(routineTemplate: RoutineTemplate): void {
     this.routineTemplate$.next(routineTemplate);
   }
 }

@@ -12,9 +12,9 @@ export class RoutineTariffCalculatorPipe implements PipeTransform {
     return Number(
       routine
         .reduce<number>((accumulator, skill) => {
-          return accumulator + skill.Tariff;
+          return accumulator + skill.tariff;
         }, 0)
-        .toFixed(2)
+        .toFixed(2),
     );
   }
 }

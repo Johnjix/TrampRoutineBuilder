@@ -1,4 +1,4 @@
 import { RoutineTemplate } from '../../models/routine-template.model';
-import { DefaultRoutineTemplate } from './skill-template';
+import { DEFAULT_ROUTINE_TEMPLATE } from './skill-template';
 
-export const ROUTINE_TEMPLATES: RoutineTemplate[] = [DefaultRoutineTemplate];
+export const ROUTINE_TEMPLATES: RoutineTemplate[] = [DEFAULT_ROUTINE_TEMPLATE];

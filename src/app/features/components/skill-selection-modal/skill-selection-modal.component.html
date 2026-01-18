@@ -1,7 +1,7 @@
 <div class="skill-selection-modal-container modal-header">
   <h1>
-    Replace #{{ skillIndex + 1 }} - {{ selectedSkill.Name }} -
-    {{ selectedSkill.Shape }}
+    Replace #{{ skillIndex + 1 }} - {{ selectedSkill.name }} -
+    {{ selectedSkill.shape }}
   </h1>
 </div>
 <div class="modal-body">
@@ -50,21 +50,27 @@
       </tr>
     </thead>
     <tbody>
-      @for (skill of skills | filterBySkillName: filterName |
-      filterBySkillShape: filterShape | filterByMaxDifficulty:
-      filterMaxDifficulty; track $index; ) {
-      <tr (click)="closeModal(skill)">
-        <td>{{ skill.Name }}</td>
-        <td>{{ skill.Shape }}</td>
-        <td>{{ skill.Tariff }}</td>
-      </tr>
+      @for (
+        skill of skills
+          | filterBySkillName: filterName
+          | filterBySkillShape: filterShape
+          | filterByMaxDifficulty: filterMaxDifficulty;
+        track $index
+      ) {
+        <tr (click)="closeModal(skill)">
+          <td>{{ skill.name }}</td>
+          <td>{{ skill.shape }}</td>
+          <td>{{ skill.tariff }}</td>
+        </tr>
       }
     </tbody>
   </table>
 </div>
 <div class="modal-footer">
-  <button class="btn btn-secondary" (click)="clearFilters()">
+  <button class="btn btn-secondary" type="button" (click)="clearFilters()">
     Clear Filters
   </button>
-  <button class="btn btn-danger" (click)="dismissModal()">Close</button>
+  <button class="btn btn-danger" type="button" (click)="dismissModal()">
+    Close
+  </button>
 </div>

@@ -12,7 +12,7 @@ export class FilterByMaxDifficultyPipe implements PipeTransform {
     if (skillMaxDifficulty < 0) return skills;
 
     const filteredSkills = skills.filter(
-      (skill) => skill.Tariff <= skillMaxDifficulty
+      (skill) => skill.tariff <= skillMaxDifficulty,
     );
 
     return filteredSkills;

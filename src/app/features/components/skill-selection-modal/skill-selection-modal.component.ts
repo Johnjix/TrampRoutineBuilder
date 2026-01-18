@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  Input,
+} from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Skill } from '../../../models/skill.model';
 import { skills } from '../../../shared/data/skill-database';
@@ -9,41 +14,39 @@ import { Shape } from '../../../models/shape.model';
 import { FilterByMaxDifficultyPipe } from '../../../shared/pipes/filter-by-max-difficulty.pipe';
 
 @Component({
-    selector: 'app-skill-selection-modal',
-    imports: [
-        FilterBySkillNamePipe,
-        FormsModule,
-        FilterBySkillShapePipe,
-        FilterByMaxDifficultyPipe,
-    ],
-    templateUrl: './skill-selection-modal.component.html',
-    styleUrl: './skill-selection-modal.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'app-skill-selection-modal',
+  imports: [
+    FilterBySkillNamePipe,
+    FormsModule,
+    FilterBySkillShapePipe,
+    FilterByMaxDifficultyPipe,
+  ],
+  templateUrl: './skill-selection-modal.component.html',
+  styleUrl: './skill-selection-modal.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SkillSelectionModalComponent {
+  private readonly _activeModal = inject(NgbActiveModal);
+
+  /* eslint-disable @angular-eslint/prefer-signals */
+  // ng-bootstrap modal inputs must remain @Input()
   @Input() selectedSkill!: Skill;
   @Input() skillIndex!: number;
 
   skills: Skill[] = skills;
-  filterName: string;
-  filterShape: Shape | null;
-  filterMaxDifficulty: number | null;
+  filterName = '';
+  filterShape: Shape | null = null;
+  filterMaxDifficulty: number | null = null;
 
-  constructor(private _activeModal: NgbActiveModal) {
-    this.filterName = '';
-    this.filterShape = null;
-    this.filterMaxDifficulty = null;
-  }
-
-  public closeModal(skill: Skill): void {
+  closeModal(skill: Skill): void {
     this._activeModal.close(skill);
   }
 
-  public dismissModal(): void {
+  dismissModal(): void {
     this._activeModal.dismiss();
   }
 
-  public clearFilters(): void {
+  clearFilters(): void {
     this.filterName = '';
     this.filterShape = null;
     this.filterMaxDifficulty = null;

@@ -12,7 +12,7 @@ export class FilterBySkillShapePipe implements PipeTransform {
     if (skillShape === null) return skills;
 
     const filteredSkills = skills.filter((skill) =>
-      skill.Shape.includes(skillShape)
+      skill.shape.includes(skillShape),
     );
 
     return filteredSkills;
