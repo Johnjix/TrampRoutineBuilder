@@ -2,10 +2,16 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Skill } from '../../../models/skill.model';
 import { RoutineTariffCalculatorPipe } from '../../../shared/pipes/routine-tariff-calculator.pipe';
 import { CommonModule } from '@angular/common';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbAccordionModule,
+  NgbModal,
+  NgbModalRef,
+} from '@ng-bootstrap/ng-bootstrap';
 import { SkillSelectionModalComponent } from '../skill-selection-modal/skill-selection-modal.component';
 import { combineLatest, map, Observable, startWith, Subject } from 'rxjs';
-import { RoutineTemplate } from '../../../shared/data/skill-template';
+import { DefaultRoutineTemplate } from '../../../shared/data/skill-template';
+import { RoutineTemplate } from '../../../models/routine-template.model';
+import { ROUTINE_TEMPLATES } from '../../../shared/data/routine-templates';
 
 export interface SkillReplace {
   SkillIndex: number;
@@ -14,28 +20,39 @@ export interface SkillReplace {
 @Component({
   selector: 'app-routine-builder',
   standalone: true,
-  imports: [RoutineTariffCalculatorPipe, CommonModule],
+  imports: [RoutineTariffCalculatorPipe, CommonModule, NgbAccordionModule],
   templateUrl: './routine-builder.component.html',
   styleUrl: './routine-builder.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RoutineBuilderComponent {
   routine$: Observable<Skill[]>;
-  routineTemplate$: Subject<Skill[]>;
+  routineTemplate$: Subject<RoutineTemplate>;
   skillReplace$: Subject<SkillReplace>;
 
+  get defaultTemplate(): Skill[] {
+    return DefaultRoutineTemplate.Routine;
+  }
+
+  get premadeRoutines(): RoutineTemplate[] {
+    return ROUTINE_TEMPLATES;
+  }
+
   constructor(private _modalService: NgbModal) {
-    this.routineTemplate$ = new Subject<Skill[]>();
+    this.routineTemplate$ = new Subject<RoutineTemplate>();
     this.skillReplace$ = new Subject<SkillReplace>();
 
     this.routine$ = combineLatest([
-      this.routineTemplate$.asObservable().pipe(startWith(RoutineTemplate)),
+      this.routineTemplate$.asObservable().pipe(startWith(null)),
       this.skillReplace$.asObservable().pipe(startWith(null)),
     ]).pipe(
       map(([routineTemplate, skillReplace]) => {
-        if (skillReplace === null) return routineTemplate;
+        if (routineTemplate === null) return [];
+        if (skillReplace === null) return routineTemplate.Routine;
 
-        return [...this.replaceSkillInRoutine(routineTemplate, skillReplace)];
+        return [
+          ...this.replaceSkillInRoutine(routineTemplate.Routine, skillReplace),
+        ];
       })
     );
   }
@@ -72,5 +89,9 @@ export class RoutineBuilderComponent {
     routine[skillReplace.SkillIndex] = skillReplace.Skill;
 
     return routine;
+  }
+
+  public selectRoutineTemplate(routineTemplate: RoutineTemplate): void {
+    this.routineTemplate$.next(routineTemplate);
   }
 }

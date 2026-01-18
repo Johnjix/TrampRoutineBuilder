@@ -1,5 +1,5 @@
 <main class="routine-builder-container">
-  @if(routine$ | async; as routine){
+  @if(routine$ | async; as routine){ @if (routine.length !== 0) {
   <h1 class="routine-builder-container__total-tariff">
     Total tariff: {{ routine | routineTariffCalculator | number : "1.2-2" }}
   </h1>
@@ -16,6 +16,34 @@
     >
       <i class="fa-solid fa-magnifying-glass"></i>
     </button>
+  </div>
+  } }@else {
+  <h1>Select Pre-made Routine</h1>
+  <div ngbAccordion [closeOthers]="true">
+    @for (premadeRoutine of premadeRoutines; track premadeRoutine.Name) {
+    <div ngbAccordionItem>
+      <h2 ngbAccordionHeader>
+        <button ngbAccordionButton>{{ premadeRoutine.Name }}</button>
+      </h2>
+      <div ngbAccordionCollapse>
+        <div ngbAccordionBody>
+          <ng-template>
+            @for (skill of premadeRoutine.Routine; track $index) {
+            <span>({{ $index + 1 }}) {{ skill.Name }}</span>
+            <hr />
+            }
+
+            <button
+              class="btn btn-success"
+              (click)="selectRoutineTemplate(premadeRoutine)"
+            >
+              Select {{ premadeRoutine.Name }}
+            </button>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+    }
   </div>
   } }
 </main>
