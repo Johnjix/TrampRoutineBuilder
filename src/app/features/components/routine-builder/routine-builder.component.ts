@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
 import { Skill } from '../../../models/skill.model';
 import { RoutineTariffCalculatorPipe } from '../../../shared/pipes/routine-tariff-calculator.pipe';
 import { CommonModule } from '@angular/common';
@@ -18,13 +23,14 @@ export interface SkillReplace {
   Skill: Skill;
 }
 @Component({
-    selector: 'app-routine-builder',
-    imports: [RoutineTariffCalculatorPipe, CommonModule, NgbAccordionModule],
-    templateUrl: './routine-builder.component.html',
-    styleUrl: './routine-builder.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'app-routine-builder',
+  imports: [RoutineTariffCalculatorPipe, CommonModule, NgbAccordionModule],
+  templateUrl: './routine-builder.component.html',
+  styleUrl: './routine-builder.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RoutineBuilderComponent {
+  private readonly _modalService = inject(NgbModal);
   routine$: Observable<Skill[]>;
   routineTemplate$: Subject<RoutineTemplate>;
   skillReplace$: Subject<SkillReplace>;
@@ -33,11 +39,10 @@ export class RoutineBuilderComponent {
     return DefaultRoutineTemplate.Routine;
   }
 
-  get premadeRoutines(): RoutineTemplate[] {
-    return ROUTINE_TEMPLATES;
-  }
+  protected readonly premadeRoutines =
+    signal<RoutineTemplate[]>(ROUTINE_TEMPLATES);
 
-  constructor(private _modalService: NgbModal) {
+  constructor() {
     this.routineTemplate$ = new Subject<RoutineTemplate>();
     this.skillReplace$ = new Subject<SkillReplace>();
 
@@ -52,7 +57,7 @@ export class RoutineBuilderComponent {
         return [
           ...this.replaceSkillInRoutine(routineTemplate.Routine, skillReplace),
         ];
-      })
+      }),
     );
   }
 
@@ -62,7 +67,7 @@ export class RoutineBuilderComponent {
       {
         fullscreen: true,
         scrollable: true,
-      }
+      },
     );
 
     const componentInstance: SkillSelectionModalComponent =
@@ -83,7 +88,7 @@ export class RoutineBuilderComponent {
 
   private replaceSkillInRoutine(
     routine: Skill[],
-    skillReplace: SkillReplace
+    skillReplace: SkillReplace,
   ): Skill[] {
     routine[skillReplace.SkillIndex] = skillReplace.Skill;
 
