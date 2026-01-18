@@ -112,6 +112,10 @@ module.exports = tseslint.config(
         {
           code: 120,
           comments: 160,
+          ignoreUrls: true,
+          ignoreStrings: true,
+          ignoreTemplateLiterals: true,
+          ignorePattern: "^\\s*import\\s.+\\sfrom\\s.+;$",
         },
       ],
       "max-lines": ["error", 400],
