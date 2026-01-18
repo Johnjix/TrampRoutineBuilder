@@ -18,12 +18,11 @@ export interface SkillReplace {
   Skill: Skill;
 }
 @Component({
-  selector: 'app-routine-builder',
-  standalone: true,
-  imports: [RoutineTariffCalculatorPipe, CommonModule, NgbAccordionModule],
-  templateUrl: './routine-builder.component.html',
-  styleUrl: './routine-builder.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-routine-builder',
+    imports: [RoutineTariffCalculatorPipe, CommonModule, NgbAccordionModule],
+    templateUrl: './routine-builder.component.html',
+    styleUrl: './routine-builder.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RoutineBuilderComponent {
   routine$: Observable<Skill[]>;

@@ -9,17 +9,16 @@ import { Shape } from '../../../models/shape.model';
 import { FilterByMaxDifficultyPipe } from '../../../shared/pipes/filter-by-max-difficulty.pipe';
 
 @Component({
-  selector: 'app-skill-selection-modal',
-  standalone: true,
-  imports: [
-    FilterBySkillNamePipe,
-    FormsModule,
-    FilterBySkillShapePipe,
-    FilterByMaxDifficultyPipe,
-  ],
-  templateUrl: './skill-selection-modal.component.html',
-  styleUrl: './skill-selection-modal.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-skill-selection-modal',
+    imports: [
+        FilterBySkillNamePipe,
+        FormsModule,
+        FilterBySkillShapePipe,
+        FilterByMaxDifficultyPipe,
+    ],
+    templateUrl: './skill-selection-modal.component.html',
+    styleUrl: './skill-selection-modal.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SkillSelectionModalComponent {
   @Input() selectedSkill!: Skill;

@@ -3,12 +3,11 @@ import { BottomNavComponent } from './components/bottom-nav/bottom-nav.component
 import { RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [BottomNavComponent, RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-root',
+    imports: [BottomNavComponent, RouterOutlet],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
   title = 'tramp-routine-builder';
