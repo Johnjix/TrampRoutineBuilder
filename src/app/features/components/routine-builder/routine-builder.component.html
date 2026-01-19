@@ -35,9 +35,12 @@
     {{ routineModel().skills | routineTariffCalculator | number: "1.2-2" }}
   </h1>
   @for (skill of routineModel().skills; track $index) {
+    @let previousSkillLandingPosition =
+      $index !== 0 ? routineModel().skills[$index - 1]?.landing : "feet";
     <app-input-skill-selector
       [formField]="routineFormTree.skills[$index]"
       [skillIndex]="$index"
+      [previousSkillLandingPosition]="previousSkillLandingPosition ?? 'feet'"
     />
   }
 </main>

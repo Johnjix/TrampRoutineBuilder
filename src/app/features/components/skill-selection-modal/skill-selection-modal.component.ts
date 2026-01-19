@@ -3,9 +3,7 @@ import {
   Component,
   inject,
   Input,
-  OnChanges,
   signal,
-  SimpleChanges,
 } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Skill } from '../../../models/skill.model';
@@ -29,12 +27,20 @@ import { LandingPosition } from '../../../models/landing-position.model';
   styleUrl: './skill-selection-modal.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SkillSelectionModalComponent implements OnChanges {
+export class SkillSelectionModalComponent {
   private readonly _activeModal = inject(NgbActiveModal);
+
+  private _requiredTakeoffPosition!: LandingPosition;
 
   /* eslint-disable @angular-eslint/prefer-signals */
   // ng-bootstrap modal inputs must remain @Input()
-  @Input() requiredTakeoffPosition!: LandingPosition;
+  // setter because ngOnChanges doesn't trigger when using ngbBoostrap component instance
+  @Input()
+  set requiredTakeoffPosition(position: LandingPosition) {
+    this._requiredTakeoffPosition = position;
+
+    this.filterPossibleSkillsBasedOnPreviousLandingPosition(position);
+  }
   @Input() selectedSkill: Skill | undefined;
   @Input() skillIndex!: number;
 
@@ -42,15 +48,6 @@ export class SkillSelectionModalComponent implements OnChanges {
   filterName = signal('');
   filterShape = signal<Shape | null>(null);
   filterMaxDifficulty = signal<number | null>(null);
-
-  ngOnChanges({ requiredTakeoffPosition }: SimpleChanges): void {
-    if (!requiredTakeoffPosition) return;
-
-    // Filter list of possible skills based on landing position of previous skill
-    this.skills.set(
-      skills.filter((s) => s.takeoff === requiredTakeoffPosition.currentValue),
-    );
-  }
 
   closeModal(skill: Skill): void {
     this._activeModal.close(skill);
@@ -64,5 +61,11 @@ export class SkillSelectionModalComponent implements OnChanges {
     this.filterName.set('');
     this.filterShape.set(null);
     this.filterMaxDifficulty.set(null);
+  }
+
+  private filterPossibleSkillsBasedOnPreviousLandingPosition(
+    position: LandingPosition,
+  ): void {
+    this.skills.set(skills.filter((s) => s.takeoff === position));
   }
 }
