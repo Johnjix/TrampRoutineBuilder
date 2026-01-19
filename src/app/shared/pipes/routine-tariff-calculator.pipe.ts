@@ -6,13 +6,14 @@ import { Skill } from '../../models/skill.model';
   standalone: true,
 })
 export class RoutineTariffCalculatorPipe implements PipeTransform {
-  transform(routine: Skill[] | null): number {
+  transform(routine: (Skill | null)[]): number {
     if (!routine) return 0;
 
     return Number(
       routine
         .reduce<number>((accumulator, skill) => {
-          return accumulator + skill.tariff;
+          const tariff: number = skill?.tariff ?? 0;
+          return accumulator + tariff;
         }, 0)
         .toFixed(2),
     );

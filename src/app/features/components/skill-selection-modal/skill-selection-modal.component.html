@@ -1,7 +1,11 @@
 <div class="skill-selection-modal-container modal-header">
   <h1>
-    Replace #{{ skillIndex + 1 }} - {{ selectedSkill.name }} -
-    {{ selectedSkill.shape }}
+    Replace #{{ skillIndex + 1 }}
+    {{
+      selectedSkill?.name
+        ? ` - ${selectedSkill?.name} - ${selectedSkill?.shape}`
+        : ""
+    }}
   </h1>
 </div>
 <div class="modal-body">
@@ -51,10 +55,10 @@
     </thead>
     <tbody>
       @for (
-        skill of skills
-          | filterBySkillName: filterName
-          | filterBySkillShape: filterShape
-          | filterByMaxDifficulty: filterMaxDifficulty;
+        skill of skills()
+          | filterBySkillName: filterName()
+          | filterBySkillShape: filterShape()
+          | filterByMaxDifficulty: filterMaxDifficulty();
         track $index
       ) {
         <tr (click)="closeModal(skill)">

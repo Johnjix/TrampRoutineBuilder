@@ -1,0 +1,24 @@
+<div class="input-group">
+  <span class="input-group-text"> {{ skillIndex() + 1 }} </span>
+  @if (value()) {
+    <span class="input-group-text form-control">{{ value()?.name }}</span>
+    <span class="input-group-text">{{ value()?.shape }}</span>
+    <span class="input-group-text">{{ value()?.tariff }}</span>
+  } @else {
+    <span class="input-group-text form-control">{{ placeholder() }}</span>
+  }
+  <button
+    class="input-group-text"
+    title="open-skill-selection-modal"
+    type="button"
+    (click)="
+      openSkillSelectionModal(
+        skillIndex(),
+        value(),
+        previousSkillLandingPosition()
+      )
+    "
+  >
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+</div>

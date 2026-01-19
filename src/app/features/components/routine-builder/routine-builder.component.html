@@ -1,55 +1,43 @@
 <main class="routine-builder-container">
-  @if (routine$ | async; as routine) {
-    @if (routine.length !== 0) {
-      <h1 class="routine-builder-container__total-tariff">
-        Total tariff: {{ routine | routineTariffCalculator | number: "1.2-2" }}
-      </h1>
-      @for (skill of routine; track $index) {
-        <div class="input-group">
-          <span class="input-group-text"> {{ $index + 1 }} </span>
-          <span class="input-group-text form-control">{{ skill.name }}</span>
-          <span class="input-group-text">{{ skill.shape }}</span>
-          <span class="input-group-text">{{ skill.tariff }}</span>
-          <button
-            class="input-group-text"
-            title="open-skill-selection-modal"
-            type="button"
-            (click)="openSkillSelectionModal(skill, $index)"
-          >
-            <i class="fa-solid fa-magnifying-glass"></i>
-          </button>
-        </div>
-      }
-    } @else {
-      <h1>Select Pre-made Routine</h1>
-      <div ngbAccordion [closeOthers]="true">
-        @for (premadeRoutine of premadeRoutines(); track premadeRoutine.name) {
-          <div ngbAccordionItem>
-            <h2 ngbAccordionHeader>
-              <button ngbAccordionButton type="button">
-                {{ premadeRoutine.name }}
-              </button>
-            </h2>
-            <div ngbAccordionCollapse>
-              <div ngbAccordionBody>
-                <ng-template>
-                  @for (skill of premadeRoutine.routine; track $index) {
-                    <span>({{ $index + 1 }}) {{ skill.name }}</span>
-                    <hr />
-                  }
-                  <button
-                    class="btn btn-success"
-                    type="button"
-                    (click)="selectRoutineTemplate(premadeRoutine)"
-                  >
-                    Select {{ premadeRoutine.name }}
-                  </button>
-                </ng-template>
-              </div>
+  @if (showTemplateRoutineSelection()) {
+    <h1>Select Pre-made Routine</h1>
+    <div #acc="ngbAccordion" ngbAccordion [closeOthers]="true">
+      @for (premadeRoutine of premadeRoutines(); track premadeRoutine.name) {
+        <div ngbAccordionItem>
+          <h2 ngbAccordionHeader>
+            <button ngbAccordionButton type="button">
+              {{ premadeRoutine.name }}
+            </button>
+          </h2>
+          <div ngbAccordionCollapse>
+            <div ngbAccordionBody>
+              <ng-template>
+                @for (skill of premadeRoutine.routine; track $index) {
+                  <span>({{ $index + 1 }}) {{ skill?.name }}</span>
+                  <hr />
+                }
+                <button
+                  class="btn btn-success"
+                  type="button"
+                  (click)="selectRoutineTemplate(premadeRoutine, accordion())"
+                >
+                  Select {{ premadeRoutine.name }}
+                </button>
+              </ng-template>
             </div>
           </div>
-        }
-      </div>
-    }
+        </div>
+      }
+    </div>
+  }
+  <h1 class="routine-builder-container__total-tariff">
+    Total tariff:
+    {{ routineModel().skills | routineTariffCalculator | number: "1.2-2" }}
+  </h1>
+  @for (skill of routineModel().skills; track $index) {
+    <app-input-skill-selector
+      [formField]="routineFormTree.skills[$index]"
+      [skillIndex]="$index"
+    />
   }
 </main>
